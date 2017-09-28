@@ -2,7 +2,7 @@
 
   The MIT License
 
-  Copyright (c) 2013 Rob Manson & Malgorzata Wierzbicka, http://buildAR.com. 
+  Copyright (c) 2013 Rob Manson & Malgorzata Wierzbicka, http://buildAR.com.
   All rights reserved.
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,38 +29,38 @@
   if (window.awe) {
     var undefined;
     var this_awe;
-    
+
     var _extend,
       _clone,
       _clone_deep,
       _type,
       _tween_queue;
-    
+
     var noop = function(){};
     var this_awe = window.awe;
     var _clickable_objects = {};
     var loading_manager;
     var texture_loading_progress = function(xhr){},
       texture_loading_error = function(){};
-      
+
     var frustum;
     var cameraViewProjectionMatrix;
     var inline_video_shim_required = !!(navigator.userAgent.match(/iphone/ig));
     function inline_video_shim_toggle(video, val){
       if (video._playing != val) {
-        video._playing = val; 
+        video._playing = val;
 
         // trigger events manually
         var event_name = val ? ( video.currentTime == 0 ? 'playing' : 'play') : 'pause';
         video.dispatchEvent(new CustomEvent(event_name));
       }
     }
-    
+
     this_awe.OBJECT_STATES = {
       INITIAL: 'initial',
       LOADING: 'loading',
       LOADED: 'loaded',
-      LOWRES: 'low_res', // not all objects have this state, applies only to objects that have a low-res fallback option 
+      LOWRES: 'low_res', // not all objects have this state, applies only to objects that have a low-res fallback option
       DEFAULT: 'default',
       ACTIVE: 'active',
       INACTIVE: 'inactive'
@@ -109,16 +109,16 @@
     awe_renderer.prototype.set_shadow_map_type = function(shadow_map_type){
       var three_renderer = this.get_three_renderer();
       three_renderer.shadowMapEnabled = true;
-      
+
       switch(shadow_map_type) {
         case 'basic':
-          three_renderer.shadowMapType = THREE.BasicShadowMap;                
+          three_renderer.shadowMapType = THREE.BasicShadowMap;
           break;
         case 'pcf':
-          three_renderer.shadowMapType = THREE.PCFShadowMap;                
+          three_renderer.shadowMapType = THREE.PCFShadowMap;
           break;
         case 'pcf_soft':
-          three_renderer.shadowMapType = THREE.PCFSoftShadowMap;                
+          three_renderer.shadowMapType = THREE.PCFSoftShadowMap;
           break;
         default:
           throw { code: 500, message: 'shadow_map_type unsupported' };
@@ -129,8 +129,8 @@
       var three_renderer = this.get_three_renderer();
       three_renderer.render( awe_scene.get_three_scene(), awe_pov.get_mesh() );
     };
-    
-    
+
+
     // awe_video_stream class
     function awe_video_stream(data, datastore){
       awe_object.call(this, data, datastore);
@@ -178,7 +178,7 @@
     awe_video_stream.prototype.stop = function(){
       awe.video_streams.delete(this.id);
     };
-    
+
     // awe_scene class
     function awe_scene(data, datastore){
       awe_object.call(this, data, datastore);
@@ -191,7 +191,7 @@
       return three_scene.children;
     };
     awe_scene.prototype.init = function(){
-      
+
     };
     awe_scene.prototype.get_three_scene = function(){
       return this._get_data_value('three_scene');
@@ -236,16 +236,16 @@
       var my_mesh = this.get_mesh();
       var new_mesh = child instanceof THREE.Object3D ? child : child.get_mesh();
       my_mesh.add(new_mesh);
-      this_awe.scene_needs_rendering = 1;      
+      this_awe.scene_needs_rendering = 1;
     };
     awe_scene.prototype._remove_child = function(child){
       var my_mesh = this.get_mesh();
       var new_mesh = child instanceof THREE.Object3D ? child : child.get_mesh();
       my_mesh.remove(new_mesh);
-      this_awe.scene_needs_rendering = 1;      
+      this_awe.scene_needs_rendering = 1;
     };
-    
-    
+
+
     // awe_texture class
     function awe_texture(data, datastore){
       awe_object.call(this, data, datastore);
@@ -340,7 +340,7 @@
 
         if (inline_video_shim_required && three_texture.video._playing && three_texture.video.duration) { // manually progress through the video
           // trigger the 'playing' event manually
-           
+
           var frames_per_second = 25;
           var time = Date.now();
           if (three_texture.video.last_time) {
@@ -361,7 +361,7 @@
             }
           }
           three_texture.video.last_time = time;
-          
+
         }
 /*
         if (three_texture.video.getAttribute('data-sourcetype') == 'camerastream' && !this_awe.video_stream()) {
@@ -380,7 +380,7 @@
       }
       return result;
     };
-    
+
     // awe_material class
     function awe_material(data, datastore){
       awe_object.call(this, data, datastore);
@@ -391,35 +391,35 @@
     awe_material.prototype.value = function(){
       return this._get_data_value('material');
     };
-    
+
     // awe_sound class
     function awe_sound(data, datastore){
       awe_object.call(this, data, datastore);
     }
     awe_sound.prototype = Object.create(awe_object.prototype);
     awe_sound.prototype.constructor = awe_sound;
-    
-    
+
+
     // awe_mesh_object class
     function awe_mesh_object(data, datastore){
       awe_object.call(this, data, datastore);
       this.children = [];
       this._tweens = {};
-      
+
       this._values_updated();
       /*
 // TODO - wire up direct click handling
       if (data.click_handlers) {
-        
+
       }
 */
     }
     awe_mesh_object.prototype = Object.create(awe_object.prototype);
     awe_mesh_object.prototype.constructor = awe_mesh_object;
 
-    
-    
-    Object.defineProperty(awe_mesh_object.prototype, 'position', { get: function() { 
+
+
+    Object.defineProperty(awe_mesh_object.prototype, 'position', { get: function() {
       var mesh = this.get_mesh('position');
       return _extend({x:0,y:0,z:0}, {
         x: parseFloat(mesh.position.x),
@@ -427,8 +427,8 @@
         z: parseFloat(mesh.position.z),
       });
     } });
-    
-    Object.defineProperty(awe_mesh_object.prototype, 'rotation', { get: function() { 
+
+    Object.defineProperty(awe_mesh_object.prototype, 'rotation', { get: function() {
       var mesh = this.get_mesh('rotation');
       return _extend({x:0,y:0,z:0}, {
         x: THREE.Math.radToDeg(mesh.rotation.x),
@@ -436,8 +436,8 @@
         z: THREE.Math.radToDeg(mesh.rotation.z),
       });
     } });
-    
-    Object.defineProperty(awe_mesh_object.prototype, 'scale', { get: function() { 
+
+    Object.defineProperty(awe_mesh_object.prototype, 'scale', { get: function() {
       var mesh = this.get_mesh('scale');
       return _extend({x:1,y:1,z:1}, {
         x: parseFloat(mesh.scale.x),
@@ -445,8 +445,8 @@
         z: parseFloat(mesh.scale.z),
       });
     } });
-    
-    Object.defineProperty(awe_mesh_object.prototype, 'visible', { get: function() { 
+
+    Object.defineProperty(awe_mesh_object.prototype, 'visible', { get: function() {
       var mesh;
       if (this.get_component) {
         mesh = this.get_component('the_mesh');
@@ -456,8 +456,8 @@
       }
       return mesh ? +mesh.visible : 0; // output as number
     } });
-    
-    Object.defineProperty(awe_mesh_object.prototype, 'opacity', { get: function() { 
+
+    Object.defineProperty(awe_mesh_object.prototype, 'opacity', { get: function() {
       var mesh;
       if (this.get_component) {
         mesh = this.get_component('the_mesh');
@@ -475,14 +475,14 @@
       }
       return opacity
     } });
-    
+
   ;['title', 'name', 'cast_shadow', 'receive_shadow'].forEach(function(prop){
-    Object.defineProperty(awe_mesh_object.prototype, prop, { get: function() { 
+    Object.defineProperty(awe_mesh_object.prototype, prop, { get: function() {
       var data = this.get_data();
       return data[prop];
     } });
   });
-    
+
     awe_mesh_object.prototype.move_to = function(position, animation){
       // validate & sanitise position
       position = _valid_coordinates(position);
@@ -506,14 +506,14 @@
           this.play_video_texture();
         }
       }
-      
+
     }
-    
+
 
     awe_mesh_object.prototype.get_mesh = function(){
       return this._get_data_value('mesh');
     };
-    
+
     awe_mesh_object.prototype.material_data = function(){
       if (!arguments.length) {
         return this._get_data_value('material');
@@ -525,7 +525,7 @@
         }
         var mesh = this.get_mesh();
         mesh.material = m;
-        this._set_data_value('material', m);        
+        this._set_data_value('material', m);
       }
     };
 
@@ -574,7 +574,7 @@
       catch(e) {}
       return material;
     };
-    
+
     awe_mesh_object.prototype.autoplay_texture = function(){
       var autoplay = false;
       var texture = this.texture();
@@ -627,33 +627,33 @@
       }
       var camera = awe.pov().get_mesh('position');
       var mesh = this.get_mesh();
-      
+
       if (!mesh.geometry) {
         console.info('Screen coordinates unavailable for objects without geometries');
         return;
       }
-      
-      
+
+
       // every time the camera or objects change position (or every frame)
       camera.updateMatrixWorld(); // make sure the camera matrix is updated
       camera.matrixWorldInverse.getInverse( camera.matrixWorld );
       cameraViewProjectionMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
       frustum.setFromMatrix( cameraViewProjectionMatrix );
-      
+
       // frustum is now ready to check all the objects you need
       if( frustum.intersectsObject( mesh ) ) {
         var width = canvas.clientWidth, height = canvas.clientHeight;
         var widthHalf = width / 2, heightHalf = height / 2;
-        
+
         var vector = new THREE.Vector3();
         var projector = new THREE.Projector();
         vector.setFromMatrixPosition( mesh.matrixWorld );
         vector.project( camera );
-        
+
         vector.x = ( vector.x * widthHalf ) + widthHalf;
         vector.y = - ( vector.y * heightHalf ) + heightHalf;
         return { x: vector.x, y: vector.y};
-      
+
       }
       return null;
     };
@@ -667,7 +667,7 @@
         console.warn('removing mesh failed', e, this, child);
       }
       this_awe.scene_needs_rendering = 1;
-      
+
       var object_type;
       if (child instanceof awe_projection) {
         object_type = 'projection';
@@ -688,7 +688,7 @@
       if (!object_type) {
         throw 'unknown object type '+child.toString()+' '+JSON.stringify(child);
       }
-      
+
       var temp = this.children.filter(function(item){
         return (item.object_type != object_type || item.object_id+'' != child.id+'');
       });
@@ -699,7 +699,7 @@
       var new_mesh = child instanceof THREE.Object3D ? child : child.get_mesh();
       my_mesh.add(new_mesh);
       this_awe.scene_needs_rendering = 1;
-      
+
       var object_type;
       if (child instanceof awe_projection) {
         object_type = 'projection';
@@ -720,9 +720,9 @@
       if (!object_type) {
         throw 'unknown object type '+child.toString()+' '+JSON.stringify(child);
       }
-            
+
       this.children.push({ object_type: object_type, object_id: child.id });
-      
+
     };
     awe_mesh_object.prototype.parent = function(){
       var parent = this._get_data_value('parent');
@@ -759,9 +759,9 @@
       });
     };
     awe_mesh_object.prototype.face_user = function(){
-      
+
       return this.look_at(awe.pov().get_world_position());
-      
+
 	  };
 
     awe_mesh_object.prototype.look_at = function(world_coords){
@@ -769,25 +769,25 @@
       var mesh = this.get_mesh('rotation');
       var v_target = _make_three_vector(this.get_world_position());
       var v_eye = _make_three_vector(world_coords);
-  		
+
   		_look_at.apply(m1, [v_eye, v_target, mesh.up]);
   		mesh.quaternion.setFromRotationMatrix( m1 );
 //       TODO - test if this can be removed (it should be covered by getters)
-      this._values_updated(); 
+      this._values_updated();
       awe.scene_needs_rendering = true;
 	  };
 
     this_awe.awe_mesh_object = awe_mesh_object
-    
-    
+
+
     // awe_poi class
     function awe_poi(data, datastore){
       awe_mesh_object.call(this, data, datastore);
-      
+
       var scale = data.scale || { x: 1, y: 1, z: 1 };
       var position = data.position || { x: 0, y: 0, z: 0 };
       var rotation = data.rotation || { x: 0, y: 0, z: 0 };
-      
+
       var origin = new THREE.Object3D();
       origin.scale.set(scale.x, scale.y, scale.z)
       origin.position.set(position.x, position.y, position.z)
@@ -795,24 +795,24 @@
       origin.rotation.y = THREE.Math.degToRad(rotation.y);
       origin.rotation.z = THREE.Math.degToRad(rotation.z);
       origin.poi_id = this.id;
-      
+
       this._set_data_value('origin', origin);
-      
+
       this.scale = scale;
       this.position = position;
       this.rotation = rotation;
-            
+
     }
     awe_poi.prototype = Object.create(awe_mesh_object.prototype);
     awe_poi.prototype.constructor = awe_poi;
-    
+
     awe_poi.prototype.get_origin = function(){
       return this._get_data_value('origin');
     };
     awe_poi.prototype.get_mesh = function(){
       return this.get_origin();
     };
-    
+
     // awe_pov class
     function awe_pov(data, datastore){
       awe_mesh_object.call(this, data, datastore);
@@ -828,8 +828,8 @@
       vector.setFromMatrixPosition( mesh.matrixWorld );
       return this.look_at(vector);
     };
-    
-    
+
+
 
 
     awe_pov.prototype.look_at_projection = function(projection_id){
@@ -843,14 +843,14 @@
       if (!target) { return; }
       // target can be any awe_mesh_object (poi, projection, pov), or any js object with x,y,z coordinates
       var target_coordinates;
-      
+
       switch (target.constructor.name) {
         case 'awe_poi':
-        case 'awe_pov': 
+        case 'awe_pov':
         case 'awe_projection':
           target_coordinates = _valid_coordinates(target.position);
           break;
-        default: 
+        default:
           // just check if there's an target.x target.y and target.z and we're good to go.
           target_coordinates = _valid_coordinates(target);
       }
@@ -883,21 +883,21 @@
     awe_pov.prototype.update_properties = function(){
       console.trace('awe_pov.prototype.update_properties(): DEPRECATED')
     };
-    
+
     ;['far', 'near', 'fov', 'aspect'].forEach(function(prop){
-      Object.defineProperty(awe_pov.prototype, prop, { get: function() { 
+      Object.defineProperty(awe_pov.prototype, prop, { get: function() {
         var mesh = this.get_mesh();
         return mesh[prop];
       } });
     });
-    
-    
-    Object.defineProperty(awe_pov.prototype, 'active', { get: function() { 
+
+
+    Object.defineProperty(awe_pov.prototype, 'active', { get: function() {
       return this._get_data_value('active');
     } });
 
-    
-    
+
+
     // awe_projection class
     function awe_projection(data, datastore){
       awe_mesh_object.call(this, data, datastore);
@@ -906,8 +906,8 @@
     }
     awe_projection.prototype = Object.create(awe_mesh_object.prototype);
     awe_projection.prototype.constructor = awe_projection;
-    
-    
+
+
     awe_projection.prototype.is_origin = function(){
       console.trace('DEPRECATED: awe_projection.prototype.is_origin');
       return false; // !!this._get_data_value('is_origin');
@@ -917,7 +917,7 @@
       var wrapper = this.get_mesh('object');
       mesh.name = 'the_mesh';
       wrapper.add(mesh);
-      
+
 //       console.log('after placing', wrapper.children.length, mesh)
       var event = new CustomEvent('placed_mesh', { detail: { id: this.id, l: wrapper.children.length } });
       window.dispatchEvent(event);
@@ -933,13 +933,13 @@
         var position_mesh = this.get_mesh('position');
         var rotation_mesh = this.get_mesh('rotation');
         var scale_mesh = this.get_mesh('scale');
-    
+
         console.log('no mesh',this.get_mesh(), this, position_mesh, rotation_mesh, scale_mesh)
         return null;
       }
       return wrapper.getObjectByName(name);
     };
-      
+
     awe_projection.prototype.get_scale_mesh = function(){
       return this.get_mesh('scale');
     };
@@ -949,32 +949,32 @@
     awe_projection.prototype.get_rotation_mesh = function(){
       return this.get_mesh('rotation');
     };
-    
+
     awe_projection.prototype.get_object_mesh = function(){
       return this.get_mesh('object');
     };
     awe_projection.prototype.get_three_mesh = function(){
       return this.get_component('the_mesh');
     };
-    
+
     awe_projection.prototype.trigger_state = function(state){
       this.state = state;
     };
     awe_projection.prototype.init = function(){
       var data = this.get_data();
       var three_mesh = data.mesh;
-      
+
       var parent = this.parent();
-      
+
       var wrapper = new THREE.Object3D();
       wrapper.name = 'wrapper';
       wrapper.projection_id = this.id;
-      
+
       if (three_mesh) { // place object straight away
         three_mesh.name = 'the_mesh';
         wrapper.add(three_mesh);
       }
-      
+
       this.get_mesh = function(type){
         if (!type) {
           return wrapper;
@@ -988,51 +988,51 @@
             return wrapper;
           case 'three':
             return this.get_component('the_mesh');
-          default: 
+          default:
             return awe_mesh_object.prototype.get_mesh.call(this);
         }
       };
-      
+
       if (parent && parent._add_child && typeof (parent._add_child) == 'function') {
         // can be any awe_mesh_object
         parent._add_child(this);
       }
-      
+
       if (!this._get_data_value('not_clickable')) {
         _clickable_objects['projection-'+this.id] = wrapper;
       }
-      
+
 
     };
 
     awe_projection.prototype.is_clickable = function(){
       return !!_clickable_objects['projection-'+this.id];
     };
-    
-    
-    
+
+
+
     // awe_light class
     function awe_light(data, datastore){
       awe_mesh_object.call(this, data, datastore);
     }
     awe_light.prototype = Object.create(awe_mesh_object.prototype);
     awe_light.prototype.constructor = awe_light;
-    
-    
-    
-    
-    
+
+
+
+
+
     this_awe.constructor.prototype.renderers = new awe_v8();
     this_awe.constructor.prototype.renderers._item_constructor = awe_renderer;
     this_awe.constructor.prototype.renderers.add = function(BODY, HEAD) {
       if (!BODY) { BODY = {}; }
       if (!HEAD) { HEAD = {}; }
-      
+
       // read settings
       var settings = this_awe.util.get_settings('renderer|debug|fps|antialias|clear_color|opacity|shadows|shadow_map_type|canvas_style|container_id');
       var capabilities = this_awe.util.get_capabilities('webgl');
       var renderer;
-      
+
       if (settings.renderer) {
         if (capabilities.webgl && settings.renderer == 'webgl') {
           var antialias = settings.antialias || true;
@@ -1041,14 +1041,14 @@
             throw { code: 500, message: 'three.js renderer creation failed' };
             return;
           }
-          
+
           BODY.three_renderer = three_renderer;
           renderer = new awe_renderer(BODY, this);
-          
+
           var clear_color = settings.clear_color || 0x000000;
           var opacity = settings.opacity || 0;
           renderer.set_clear_color( clear_color, opacity );
-          
+
           // spotlight is required to add shadows!
           // see https://github.com/mrdoob/three.js/issues/748
           if (settings.shadows) {
@@ -1056,7 +1056,7 @@
             renderer.set_shadow_map_type(shadow_map_type);
           }
         }
-        
+
         var l = this.constructor.prototype.list().length;
         var awe_canvas = renderer.get_canvas();
         awe_canvas.id = 'awe_canvas-'+l;
@@ -1065,13 +1065,13 @@
           try {
             for (var i in style_settings) {
               if (style_settings.hasOwnProperty(i)) {
-                awe_canvas.style[i] = style_settings[i];                
+                awe_canvas.style[i] = style_settings[i];
               }
             }
           }
           catch(e) { /* TODO */ };
         }
-        else {             
+        else {
           awe_canvas.style.position = 'absolute';
           awe_canvas.style.top = '0px';
           awe_canvas.style.left = '0px';
@@ -1089,26 +1089,26 @@
         }
         var w = awe_canvas.parentNode.clientWidth,
           h = awe_canvas.parentNode.clientHeight;
-          
+
         if (!w || !h) {
           console.info('awe canvas container has no height - making it use window dimensions', w, h);
           w = window.innerWidth;
           h = window.innerHeight;
         }
         renderer.set_size(w, h, false);
-        
+
       }
       else {
         throw { code: 500, message: 'three.js renderer not defined' };
       }
-      
+
       this_awe.scene_needs_rendering = 1;
       return this.constructor.prototype.add.call(this, renderer, HEAD); // super
     }
 
     this_awe.constructor.prototype.renderer = function(id) {
       return this_awe.renderers.view({ id: id ? id : 'default' });
-    }; 
+    };
 
     this_awe.constructor.prototype.lights = new awe_v8();
     this_awe.constructor.prototype.lights._item_constructor = awe_light;
@@ -1120,15 +1120,15 @@
       }
       var results = [],
         self = this;
-        
+
       BODY.forEach(function(BODY_item){
-          
+
         // sensible defaults
         BODY_item.id = BODY_item.id || "light-"+random_id();
         BODY_item.visible = BODY_item.visible !== undefined ? BODY_item.visible : 1;
         BODY_item.type = BODY_item.type !== undefined ? BODY_item.type : 'hemisphere';
         BODY_item.color = BODY_item.color !== undefined ? BODY_item.color : 0x404040;
-  
+
         if (HEAD.parent && HEAD.parent.object_id && HEAD.parent.object_type && this_awe[HEAD.parent.object_type+'s'] && ''+this_awe[HEAD.parent.object_type+'s'] == 'awe_v8_object')  {
           try {
             BODY_item.parent = HEAD.parent;
@@ -1139,7 +1139,7 @@
           }
         }
 
-        var three_light, 
+        var three_light,
           position = true,
           shadows = false;
         switch (BODY_item.type) {
@@ -1199,13 +1199,13 @@
             shadows = true;
 
             break;
-          default: 
+          default:
             three_light = new THREE.AmbientLight(BODY_item.color);
         }
-        
+
         // spot and directional lights
         if (shadows && three_light.shadow) {
-          
+
           if (undefined !== BODY_item.only_shadow) {
             three_light.onlyShadow = !!BODY_item.only_shadow;
           }
@@ -1216,9 +1216,9 @@
             three_light.shadow.camera.visible = !!BODY_item.shadow_camera_visible;
             three_light.shadow.camera.near = BODY_item.shadow_camera_near || 0.01;
             three_light.shadow.camera.far = BODY_item.shadow_camera_far || 5000;
-          }    
+          }
 
-        
+
           if (parseInt(BODY_item.shadow_bias) != NaN) {
             three_light.shadow.bias = parseInt(BODY_item.shadow_bias);
           }
@@ -1235,15 +1235,15 @@
         if (three_light.target && three_light.target.position && BODY_item.target && typeof(BODY_item.target) == 'object') {
           three_light.target.position.set(BODY_item.target.x || 0, BODY_item.target.y || 0, BODY_item.target.z || 0)
         }
-        
+
         if (position && three_light.position && BODY_item.position && typeof(BODY_item.position) == 'object') {
           three_light.position.set(BODY_item.position.x || 0, BODY_item.position.y || 0, BODY_item.position.z || 0)
-        
+
         }
-        
+
         BODY_item.mesh = three_light;
         var light = new awe_light(BODY_item, self);
-        
+
         var parent = light.parent();
         if (parent && parent._add_child && typeof (parent._add_child) == 'function') {
           // can be any awe_mesh_object
@@ -1252,7 +1252,7 @@
             parent._add_child(three_light.target);
           }
         }
-        
+
         this_awe.scene_needs_rendering = 1;
         results.push(light);
       });
@@ -1268,7 +1268,7 @@
       }
       var return_result = {},
         self = this;
-      
+
       BODY.forEach(function(item){
         if (item.data && item.where && item.where.id) {
           var fields_updated = [];
@@ -1304,7 +1304,7 @@
             }
             var result = _clone(item);
             result.mesh = mesh;
-            
+
             return_result[where_id] = self.constructor.prototype.update.call(self, result, HEAD); // super
           });
         }
@@ -1325,7 +1325,7 @@
       else if (Array.isArray(BODY)) {
         id_array = BODY;
       }
-      
+
       id_array.forEach(function(BODY_item){
         var light;
         if (typeof BODY_item == 'string' || typeof BODY_item == 'number') {
@@ -1335,28 +1335,28 @@
         else if (BODY_item.id) {
           light = this_awe.lights.view(BODY_item.id);
         }
-        
-        
+
+
         if (!light) {
           console.trace('cant delete',BODY_item);
           return;
         }
         var mesh = light.get_mesh();
         if (mesh && mesh.parent) {
-          if (mesh.target) { 
+          if (mesh.target) {
             mesh.parent.remove(mesh.target);
           }
           mesh.parent.remove(mesh);
         }
         else {
           console.log('no light mesh to delete!', BODY, HEAD)
-        } 
+        }
       });
-      
+
       this_awe.scene_needs_rendering = 1;
       return this.constructor.prototype.delete.call(this, BODY, HEAD); // super
     };
-    
+
     this_awe.constructor.prototype.video_streams = new awe_v8();
     this_awe.constructor.prototype.video_streams._item_constructor = awe_video_stream;
     this_awe.constructor.prototype.video_streams.add = function(BODY, HEAD) {
@@ -1368,43 +1368,45 @@
           var self = this,
             video_id = 'video_stream-'+BODY.id+'-'+random_id(),
             video = document.createElement('video');
-          
+
           video.setAttribute('id', video_id);
           video.setAttribute('autoplay', true);
+          video.setAttribute('playsinline', true);
           video.style.position = 'absolute';
           video.style.top = '-999em';
           video.style.left = '-999em';
           video.style.height = '100%';
           video.style.width = '100%';
-          video.setAttribute('width', '100%');  
+          video.setAttribute('width', '100%');
           video.setAttribute('height', '100%');
-          
+
           BODY.video_element = video;
           var video_stream = new awe_video_stream(BODY, this);
           var result = this.constructor.prototype.add.call(this, video_stream, HEAD); // super
           // if many sources try to get the environemt-facing camera
-          
-          var go = function(video_source_id){
+
+          var go = function(){
             var options = this_awe.util.extend({
               video: true
             }, BODY.gum_options);
-            if (video_source_id) {
-              options.video = {
-                optional: [{ facingMode: (BODY.facing_mode ? BODY.facing_mode : "environment") }, {sourceId: video_source_id}]
-              };
-            }
+
+            options.video = {
+                facingMode: { exact: 'environment' }
+            };
+
+
             // clear before each access request
             this_awe.gum_denied = false;                console.log('requesting gum')
-            this_awe.util.get_user_media(options, 
+            this_awe.util.get_user_media(options,
               function(stream) {
                 document.body.appendChild(video);
                 video.muted = true;
-                
+
                 BODY.stream = stream;
                 self.constructor.prototype.update.call(this, {data: {stream: stream}, where: {id: BODY.id}}, HEAD); // super
                 this_awe.util.connect_stream_to_src(stream, video);
                 var targets = this_awe.util.get_stream_targets();
-                
+
                 video.addEventListener('pause', function(){
                   var event = new CustomEvent('gum_pause', { detail: { id: BODY.id } });
                   window.dispatchEvent(event);
@@ -1420,7 +1422,7 @@
                     window.dispatchEvent(event);
                   }, false);
                 }
-              }, 
+              },
               function(e) {
                 this_awe.gum_denied = true;
                 var event = new CustomEvent('gum_error', { detail: { id: BODY.id } });
@@ -1428,46 +1430,9 @@
               }
             );
           }
-          
-          if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-            navigator.mediaDevices.enumerateDevices()
-            .then(function(devices) {
-              var selected_source = null;
-              var last_videoinput_source = null;
-              devices.forEach(function(device) {
-                if (device.kind === 'videoinput') {
-                  if (BODY.facing_mode === 'environment' && device.label.indexOf('back') !== -1) {
-                    selected_source = device.deviceId;
-                  }
-                  last_videoinput_source = device.deviceId;
-                }
-              });
-              if ((!selected_source || BODY.facing_mode === 'environment') && last_videoinput_source) {
-                selected_source = last_videoinput_source;
-              }
-              go(selected_source);
-            })
-            .catch(function(err) {
-              console.log(err.name + ": " + err.message);
-            });
-          }
-          else if (window.MediaStreamTrack && window.MediaStreamTrack.getSources) {
-            MediaStreamTrack.getSources(function(source_infos) {
-              var selected_source = null;
-              for (var i = 0; i != source_infos.length; ++i) {
-                var source_info = source_infos[i];
-                if (source_info.kind === 'video') {
-                  if (!selected_source || (source_info.facing && source_info.facing == (BODY.facing_mode ? BODY.facing_mode : "environment") )) {
-                    selected_source = source_info.id;
-                  }
-                }
-              }
-              go(selected_source);
-            });
-          }
-          else {
-            go();
-          }
+
+          go();
+
         }
         catch(e) {
           console.log(e);
@@ -1512,7 +1477,7 @@
           // remove video element
           var video = video_stream.get_video_element();
           video.parentNode.removeChild(video);
-          
+
           return this.constructor.prototype.delete.call(this, BODY, HEAD); // super
         }
         catch(e) {
@@ -1523,20 +1488,20 @@
 
     this_awe.constructor.prototype.video_stream = function(id) {
       return this_awe.video_streams.view({ id: id ? id : 'default' });
-    }; 
-    
+    };
+
     this_awe.constructor.prototype.scenes = new awe_v8();
     this_awe.constructor.prototype.scenes._item_constructor = awe_scene;
     this_awe.constructor.prototype.scenes.add = function(BODY, HEAD) {
       if (!BODY) { BODY = {}; }
       if (!HEAD) { HEAD = {}; }
-      
+
       if (!Array.isArray(BODY)) {
         BODY = [BODY];
       }
       var results = [],
         self = this;
-        
+
       BODY.forEach(function(BODY_item){
         var scene = new THREE.Scene();
         if (BODY_item.container_id && document.getElementById(BODY_item.container_id)) {
@@ -1556,11 +1521,11 @@
     this_awe.constructor.prototype.scene.stringify = function() {
       // TODO walk the scene and stringify to JSON
     }
-    
 
 
-    
-    
+
+
+
     this_awe.constructor.prototype.povs = new awe_v8();
     this_awe.constructor.prototype.povs._item_constructor = awe_pov;
     this_awe.constructor.prototype.povs.add = function(BODY, HEAD) {
@@ -1572,14 +1537,14 @@
       var settings = this_awe.util.get_settings('fov|near|far|default_camera_position');
       var self = this;
       var result_ids = [];
-      
+
       var fov = settings.fov || 65;  // ~fov of ios devices - TODO: should set default based on device_type or ideally camera introspection
       var near = settings.near || 1;
       var far = settings.far || 20000;
-      
+
       var awe_canvas = this_awe.renderer().get_canvas();
-      var aspect_ratio = awe_canvas.clientWidth / awe_canvas.clientHeight; 
-      
+      var aspect_ratio = awe_canvas.clientWidth / awe_canvas.clientHeight;
+
       BODY.forEach(function(BODY_item){
         var camera = new THREE.PerspectiveCamera(
           fov,
@@ -1597,28 +1562,28 @@
         var position = _extend({x:0, y:0, z:0}, settings.default_camera_position);
         camera.position.set(position.x, position.y, position.z);
         this_awe.scene().add(camera);
-        
+
         var result = new awe_pov(BODY_item, self);
-        
+
         this_awe.scene_needs_rendering = 1;
         var ret = self.constructor.prototype.add.call(self, result, HEAD); // super
         result_ids.push(ret);
         result.look_at(this_awe.origin);
       })
-      
+
       return { id: result_ids };
     };
-    
+
     this_awe.constructor.prototype.povs.update = function(BODY, HEAD) {
       if (!BODY) { BODY = {}; }
       if (!HEAD) { HEAD = {}; }
       if (!Array.isArray(BODY)) {
         BODY = [BODY];
       }
-      
+
       var return_result = {},
         self = this;
-        
+
       BODY.forEach(function(item){
         if (item.data && item.where && item.where.id) {
           var fields_updated = [];
@@ -1644,7 +1609,7 @@
           if (fields_updated.length) {
             HEAD.fields_updated = fields_updated;
           }
-          item.where.id.forEach(function(where_id){  
+          item.where.id.forEach(function(where_id){
             try {
               var object = this_awe.povs.view(where_id);
               var mesh = object.get_mesh();
@@ -1666,7 +1631,7 @@
             return_result[where_id] = self.constructor.prototype.update.call(self, result, HEAD); // super
           });
           this_awe.scene_needs_rendering = 1;
-          
+
         }
       });
       return return_result;
@@ -1690,7 +1655,7 @@
         return povs[0];
       }
     };
-    
+
     this_awe.constructor.prototype.pois = new awe_v8();
     this_awe.constructor.prototype.pois._item_constructor = awe_poi;
     this_awe.constructor.prototype.pois.add = function(BODY, HEAD) {
@@ -1701,13 +1666,13 @@
       }
       var self = this,
         pois = [];
-      
+
       BODY.forEach(function(BODY_item){
-          
+
         if (!BODY_item.id) {
           BODY_item.id = 'poi-'+random_id();
         }
-        
+
         var projections = [];
         if (BODY_item.projections && Array.isArray(BODY_item.projections)) {
           projections = BODY_item.projections;
@@ -1728,7 +1693,7 @@
         BODY_item.parent = parent;
         var poi = new awe_poi(BODY_item, self);
         pois.push(poi);
-        
+
         // add the mesh to the scene/parent
         var p = poi.parent();
         if (p && p._add_child) {
@@ -1757,9 +1722,9 @@
       BODY.forEach(function(item){
         if (item.data && item.where && item.where.id) {
           var fields_updated = [];
-          if (item.data.position) { fields_updated.push('position'); } 
-          if (item.data.scale) { fields_updated.push('scale'); } 
-          if (item.data.rotation) { fields_updated.push('rotation'); } 
+          if (item.data.position) { fields_updated.push('position'); }
+          if (item.data.scale) { fields_updated.push('scale'); }
+          if (item.data.rotation) { fields_updated.push('rotation'); }
           if (fields_updated.length) {
             HEAD.fields_updated = fields_updated;
           }
@@ -1771,7 +1736,7 @@
               var object = this_awe.pois.view(where_id);
               var mesh = object.get_mesh();
             } catch(e) { return; /* TODO */ };
-            
+
             if(item.data.animation && parseFloat(item.data.animation.duration) > 0) {
               var poi = self.constructor.prototype.view(where_id),
                 end_callback = item.data.animation.end_callback;
@@ -1825,7 +1790,7 @@
             }
           });
         }
-        
+
         if (poi.parent && typeof(poi.parent) == 'function')  {
           try {
             parent = poi.parent();
@@ -1843,11 +1808,11 @@
           }
           else {
             console.log('no mesh to delete!', BODY, HEAD)
-          } 
+          }
         }
       }
       catch(e) {
-        this_awe.error_handler(e);  
+        this_awe.error_handler(e);
       }
       this_awe.scene_needs_rendering = 1;
       return this.constructor.prototype.delete.call(this, BODY, HEAD); // super
@@ -1910,7 +1875,7 @@
         if (!projection._get_data_value('not_clickable')) {
           _clickable_objects['projection-'+id] = mesh;
         }
-        
+
         if (parent._add_child && typeof (parent._add_child) == 'function') {
           // can be any awe_mesh_object
 
@@ -1933,9 +1898,9 @@
 */
         var event = new CustomEvent('projection_loaded', {detail: id});
         window.dispatchEvent(event);
-        
+
       }
-      
+
       BODY.forEach(function(BODY_item){
         var config = _clone(BODY_item);
         var geometry, material, mesh, parent, origin;
@@ -1946,7 +1911,7 @@
           console.warn('projections.add(): BODY.id already exists', BODY_item.id);
           return;
         }
-        
+
         BODY_item.config = config;
         if (HEAD.parent && HEAD.parent.object_id && HEAD.parent.object_type && this_awe[HEAD.parent.object_type+'s'] && ''+this_awe[HEAD.parent.object_type+'s'] == 'awe_v8_object')  {
           try {
@@ -1970,13 +1935,13 @@
         origin = new THREE.Object3D();
         origin.name = 'projection ID:'+BODY_item.id+' origin';
         BODY_item.origin = origin;
-        
+
         /*
 if (!parent) {
           throw 'HEAD.poi_id or HEAD.parent required';
         }
 */
-        
+
         if (!BODY_item.material) {
           BODY_item.material = {};
         }
@@ -2006,38 +1971,38 @@ if (!parent) {
             this_awe.sounds.add(BODY_item.sound);
           }
         }
-        
+
         var item, item_id;
         if (BODY_item.geometry) {
           if (BODY_item.geometry.shape) {
             var shape_data = _validate_shape(BODY_item.geometry);
             switch(BODY_item.geometry.shape) {
-              case 'cube': 
+              case 'cube':
                 geometry = new THREE.BoxGeometry(shape_data.x, shape_data.y, shape_data.z);
                 break;
-              case 'circle': 
+              case 'circle':
                 geometry = new THREE.CircleGeometry(shape_data.radius, shape_data.segments);
                 break;
-              case 'sphere': 
+              case 'sphere':
                 geometry = new THREE.SphereGeometry(shape_data.radius, shape_data.widthSegments, shape_data.heightSegments, shape_data.phiStart, shape_data.phiLength, shape_data.thetaStart, shape_data.thetaLength);
                 break;
-              case 'cylinder': 
+              case 'cylinder':
                 geometry = new THREE.CylinderGeometry(shape_data.radiusTop, shape_data.radiusBottom, shape_data.height, shape_data.radiusSegments, shape_data.heightSegments, shape_data.openEnded);
                 break;
-              case 'lathe': 
+              case 'lathe':
                 geometry = new THREE.LatheGeometry(shape_data.points, shape_data.segments, shape_data.phiStart, shape_data.phiLength);
                 break;
-              case 'octahedron': 
+              case 'octahedron':
                 geometry = new THREE.OctahedronGeometry(shape_data.radius, shape_data.detail);
                 break;
-              case 'plane': 
+              case 'plane':
   //              geometry = new THREE.PlaneGeometry(shape_data.width, shape_data.height, shape_data.widthSegments, shape_data.heightSegments)
                 geometry = new THREE.PlaneBufferGeometry(parseInt(shape_data.width,10), parseInt(shape_data.height,10), parseInt(shape_data.widthSegments,10), parseInt(shape_data.heightSegments,10));
                 break;
-              case 'tetrahedron': 
+              case 'tetrahedron':
                 geometry = new THREE.TetrahedronGeometry(shape_data.radius, shape_data.detail);
                 break;
-              case 'text': 
+              case 'text':
                 // async process
                 if (!shape_data.font_url) {
                   console.warn('font_url required');
@@ -2049,31 +2014,31 @@ if (!parent) {
                 item_id = self.constructor.prototype.add.call(self, item, HEAD); // super
                 item.trigger_state(awe.OBJECT_STATES.DEFAULT);
                 item.trigger_state(awe.OBJECT_STATES.LOADING);
-                
+
                 // load the font
                 var loader = new THREE.FontLoader();
                 loader.load( shape_data.font_url, function ( font ) {
                   shape_data.parameters.font = font;
-                  
+
           				var geometry = new THREE.TextGeometry( shape_data.text, shape_data.parameters );
           				var texture, material;
                   if (Object.keys(BODY_item.texture).length) {
                     if (BODY_item.geometry.x) { // a cube
-                      BODY_item.texture.width = BODY_item.geometry.x; 
+                      BODY_item.texture.width = BODY_item.geometry.x;
                     }
                     if (BODY_item.geometry.width) { // a plane
-                      BODY_item.texture.width = BODY_item.geometry.width; 
+                      BODY_item.texture.width = BODY_item.geometry.width;
                     }
                     if (BODY_item.geometry.y) { // a cube
-                      BODY_item.texture.height = BODY_item.geometry.y; 
+                      BODY_item.texture.height = BODY_item.geometry.y;
                     }
                     if (BODY_item.geometry.height) { // a plane
-                      BODY_item.texture.height = BODY_item.geometry.height; 
+                      BODY_item.texture.height = BODY_item.geometry.height;
                     }
-                      
+
                     var capabilities = this_awe.util.get_capabilities('gum');
                     if (BODY_item.texture.path == 'camerastream' && !capabilities.gum){
-                      
+
                       delete(BODY_item.texture.path);
                       BODY_item.texture.width = 800;
                       BODY_item.texture.height = 600;
@@ -2085,7 +2050,7 @@ if (!parent) {
                     BODY_item.texture.paused = (BODY_item.visible != undefined ? !BODY_item.visible : false);
                     BODY_item.texture.success_callback = function(){
                       awe.util.trigger_event(window, 'texture_loaded', {detail: BODY_item.id});
-                    
+
                     }
                     var texture_id = this_awe.textures.add(BODY_item.texture);
                     BODY_item.texture.id = texture_id.id;
@@ -2094,25 +2059,25 @@ if (!parent) {
                     }
                     BODY_item.material.map = this_awe.textures.view(texture_id).value();
                   }
-  
+
                   var material_id = this_awe.materials.add(BODY_item.material);
                   BODY_item.material.id = material_id.id;
                   var material = this_awe.materials.view(material_id).value();
                   mesh = new THREE.Mesh(geometry, material);
-                
-                  // and then finish creating like with other loaders 
-                    
-                  if (BODY_item.position) { 
+
+                  // and then finish creating like with other loaders
+
+                  if (BODY_item.position) {
                     var position_mesh = item.get_mesh('position');
                     _update_mesh_io({position: BODY_item.position}, position_mesh);
                     delete (BODY_item.position);
                   }
-                  if (BODY_item.scale) { 
+                  if (BODY_item.scale) {
                     var scale_mesh = item.get_mesh('scale');
                     _update_mesh_io({scale: BODY_item.scale}, scale_mesh);
                     delete (BODY_item.scale);
                   }
-                  if (BODY_item.rotation) { 
+                  if (BODY_item.rotation) {
                     var rotation_mesh = item.get_mesh('rotation');
                     _update_mesh_io({rotation: BODY_item.rotation}, rotation_mesh);
                     delete (BODY_item.rotation);
@@ -2120,48 +2085,48 @@ if (!parent) {
 
                   BODY_item.mesh = _update_mesh_io(BODY_item, mesh, true);
                   BODY_item.mesh.name = 'the_mesh';
-                  
-                  
+
+
                   if (loading_strategy != 'delay_placing' || item.auto_place_mesh()) {
                     item.place_mesh(BODY_item.mesh);
                   }
                   try {
                     console.log('loaded text geometry', BODY_item.id);
                   } catch(e) {}
-                  
+
                   finish_add(BODY_item.id);
                   _update_materials(BODY_item.mesh);
                   //end_callback();
 
                 });
                 result_ids.push(item_id.id);
-            
+
                 // out of forEach loop
                 return;
-              case 'torus': 
+              case 'torus':
                 geometry = new THREE.TorusGeometry(shape_data.radius, shape_data.tube, shape_data.radialSegments, shape_data.tubularSegments, shape_data.arc);
                 break;
-              case 'torusknot': 
+              case 'torusknot':
                 geometry = new THREE.TorusKnotGeometry(shape_data.radius, shape_data.tube, shape_data.radialSegments, shape_data.tubularSegments, shape_data.p, shape_data.q, shape_data.heightScale);
                 break;
-              case 'tube': 
+              case 'tube':
                 geometry = new THREE.TubeGeometry(shape_data.path, shape_data.segments, shape_data.radius, shape_data.radiusSegments, shape_data.closed, shape_data.debug)
                 break;
-              case 'shape': 
+              case 'shape':
                 geometry = new THREE.ShapeGeometry(shape_data.points);
                 break;
-              case 'extrude': 
+              case 'extrude':
                 geometry = new THREE.ExtrudeGeometry(shape_data.points, shape_data.extrude_settings);
                 break;
-              case 'grid': 
+              case 'grid':
                 geometry = new THREE.GridHelper(shape_data.size, shape_data.step)
                 break;
-              default: 
+              default:
                 geometry = new THREE.BoxGeometry(10,10,10);
             }
             if (geometry) {
               if (BODY_item.geometry.shape == 'grid') {
-                // grid is not a geometry 
+                // grid is not a geometry
                 // ignore texture and material
                 if (Object.keys(BODY_item.texture).length) {
                   console.info('grid projection does not support textures.');
@@ -2179,21 +2144,21 @@ if (!parent) {
                 var texture, material;
                 if (Object.keys(BODY_item.texture).length) {
                   if (BODY_item.geometry.x) { // a cube
-                    BODY_item.texture.width = BODY_item.geometry.x; 
+                    BODY_item.texture.width = BODY_item.geometry.x;
                   }
                   if (BODY_item.geometry.width) { // a plane
-                    BODY_item.texture.width = BODY_item.geometry.width; 
+                    BODY_item.texture.width = BODY_item.geometry.width;
                   }
                   if (BODY_item.geometry.y) { // a cube
-                    BODY_item.texture.height = BODY_item.geometry.y; 
+                    BODY_item.texture.height = BODY_item.geometry.y;
                   }
                   if (BODY_item.geometry.height) { // a plane
-                    BODY_item.texture.height = BODY_item.geometry.height; 
+                    BODY_item.texture.height = BODY_item.geometry.height;
                   }
-                    
+
                   var capabilities = this_awe.util.get_capabilities('gum');
                   if (BODY_item.texture.path == 'camerastream' && !capabilities.gum){
-                    
+
                     delete(BODY_item.texture.path);
                     BODY_item.texture.width = 800;
                     BODY_item.texture.height = 600;
@@ -2231,12 +2196,12 @@ if (!parent) {
             var loader;
             // get extension and detect file type
             var file_extension = BODY_item.geometry.file_type ? BODY_item.geometry.file_type.toLowerCase() : (BODY_item.geometry.path.split('.').pop()).toLowerCase();
-            
+
             var progress_callback = BODY_item.geometry.progress_callback && _type(BODY_item.geometry.progress_callback) == 'function' ? BODY_item.geometry.progress_callback : noop;
             var start_callback = BODY_item.geometry.start_callback && _type(BODY_item.geometry.start_callback) == 'function' ? BODY_item.geometry.start_callback : noop;
             var end_callback = BODY_item.geometry.end_callback && _type(BODY_item.geometry.end_callback) == 'function' ? BODY_item.geometry.end_callback : noop;
             var error_callback = BODY_item.geometry.error_callback && _type(BODY_item.geometry.error_callback) == 'function' ? BODY_item.geometry.error_callback : noop;
-            
+
 
             switch(file_extension) {
               case 'obj':
@@ -2251,18 +2216,18 @@ if (!parent) {
                     try {
                       console.log('loaded mtl obj1', BODY_item.id, mesh.children[1].material.color);
                     } catch(e) {}
-                                
-                    if (BODY_item.position) { 
+
+                    if (BODY_item.position) {
                       var position_mesh = item.get_mesh('position');
                       _update_mesh_io({position: BODY_item.position}, position_mesh);
                       delete (BODY_item.position);
                     }
-                    if (BODY_item.scale) { 
+                    if (BODY_item.scale) {
                       var scale_mesh = item.get_mesh('scale');
                       _update_mesh_io({scale: BODY_item.scale}, scale_mesh);
                       delete (BODY_item.scale);
                     }
-                    if (BODY_item.rotation) { 
+                    if (BODY_item.rotation) {
                       var rotation_mesh = item.get_mesh('rotation');
                       _update_mesh_io({rotation: BODY_item.rotation}, rotation_mesh);
                       delete (BODY_item.rotation);
@@ -2270,11 +2235,11 @@ if (!parent) {
 
                     BODY_item.mesh = _update_mesh_io(BODY_item, mesh, true);
                     item.place_mesh(BODY_item.mesh);
-                    
+
                     try {
                       console.log('loaded mtl obj2', BODY_item.id, mesh.children[1].material.color);
                     } catch(e) {}
-                    
+
                     finish_add(BODY_item.id);
                     _update_materials(BODY_item.mesh);
                     end_callback();
@@ -2285,19 +2250,19 @@ if (!parent) {
                   var texture;
                   if (BODY_item.texture.path) {
                     if (BODY_item.geometry.x) { // a cube
-                      BODY_item.texture.width = BODY_item.geometry.x; 
+                      BODY_item.texture.width = BODY_item.geometry.x;
                     }
                     if (BODY_item.geometry.width) { // a plane
-                      BODY_item.texture.width = BODY_item.geometry.width; 
+                      BODY_item.texture.width = BODY_item.geometry.width;
                     }
                     if (BODY_item.geometry.y) { // a cube
-                      BODY_item.texture.height = BODY_item.geometry.y; 
+                      BODY_item.texture.height = BODY_item.geometry.y;
                     }
                     if (BODY_item.geometry.height) { // a plane
-                      BODY_item.texture.height = BODY_item.geometry.height; 
+                      BODY_item.texture.height = BODY_item.geometry.height;
                     }
-                      
-                    
+
+
                     var capabilities = this_awe.util.get_capabilities('gum');
                     if (BODY_item.texture.path == 'camerastream' && !capabilities.gum){
                       delete(BODY_item.texture.path);
@@ -2324,7 +2289,7 @@ if (!parent) {
                   item_id = self.constructor.prototype.add.call(self, item, HEAD); // super
                   item.trigger_state(awe.OBJECT_STATES.DEFAULT);
                   item.trigger_state(awe.OBJECT_STATES.LOADING);
-                
+
                   loader.load(BODY_item.geometry.path, function (mesh) {
                     if (texture) {
                       mesh.traverse(function (child) {
@@ -2338,7 +2303,7 @@ if (!parent) {
                     item.place_mesh(BODY_item.mesh);
                     finish_add(BODY_item.id);
                     end_callback();
-                    
+
                   }, progress_callback, error_callback);
                 }
                 start_callback();
@@ -2349,17 +2314,17 @@ if (!parent) {
                 item_id = self.constructor.prototype.add.call(self, item, HEAD); // super
                 item.trigger_state(awe.OBJECT_STATES.DEFAULT);
                 item.trigger_state(awe.OBJECT_STATES.LOADING);
-                
+
                 loader = new THREE.AssimpJSONLoader(loading_manager);
   //              loader.options.convertUpAxis = true;
                 loader.load( BODY_item.geometry.path, function ( object ) {
                   try {
-                    
+
                   BODY_item.mesh = _update_mesh_io(BODY_item, object, true);
                   item.place_mesh(BODY_item.mesh);
                   finish_add(BODY_item.id);
                   end_callback();
-                  
+
                   }
                   catch(e) { console.log(e); }
                 }, progress_callback, error_callback);
@@ -2371,7 +2336,7 @@ if (!parent) {
                 item_id = self.constructor.prototype.add.call(self, item, HEAD); // super
                 item.trigger_state(awe.OBJECT_STATES.DEFAULT);
                 item.trigger_state(awe.OBJECT_STATES.LOADING);
-                
+
                 loader = new THREE.ColladaLoader(loading_manager);
                 loader.options.convertUpAxis = true;
                 loader.load( BODY_item.geometry.path, function ( collada ) {
@@ -2383,7 +2348,7 @@ if (!parent) {
                       animation.play();
                     }
                   });
-                  
+
                   BODY_item.mesh = _update_mesh_io(BODY_item, dae, true);
                   item.place_mesh(BODY_item.mesh);
                   finish_add(BODY_item.id);
@@ -2395,9 +2360,9 @@ if (!parent) {
                 console.warn('unknown file type', file_extension);
                 throw { code: 500, messgae: 'unknown file type: '+ file_extension};
             }
-            
+
             result_ids.push(item_id.id);
-        
+
             // out of forEach loop
             return;
           }
@@ -2406,13 +2371,13 @@ if (!parent) {
           geometry = new THREE.BoxGeometry(10,10,10);
           var material_id = this_awe.materials.add(BODY_item.material);
           BODY_item.material.id = material_id.id;
-          
+
           var material = this_awe.materials.view(material_id).value();
           mesh = new THREE.Mesh(geometry, material);
         }
 //        BODY_item.visible = parent.visible;
         var mesh_data = awe.util.clone(BODY_item);
-        
+
         var position, rotation, scale;
         if (BODY_item.rotation) {
           rotation = BODY_item.rotation;
@@ -2426,11 +2391,11 @@ if (!parent) {
           scale = BODY_item.scale;
           delete (mesh_data.scale);
         }
-        
+
         BODY_item.mesh = _update_mesh_io(mesh_data, mesh, true);
-        
+
         item = new awe_projection(BODY_item, self);
-        
+
         if (scale) {
           _update_mesh_io({scale: scale}, item.get_mesh('scale'));
         }
@@ -2440,7 +2405,7 @@ if (!parent) {
         if (position) {
           _update_mesh_io({position: position}, item.get_mesh('position'));
         }
-        
+
 /*
         // why was this here???
         if (BODY_item.scale) {
@@ -2451,17 +2416,17 @@ if (!parent) {
           }
         }
 */
-        
-        
-        
+
+
+
         item_id = self.constructor.prototype.add.call(self, item, HEAD); // super
-        
+
         item.trigger_state(awe.OBJECT_STATES.DEFAULT);
         item.trigger_state(awe.OBJECT_STATES.LOADING);
         result_ids.push(item_id.id);
         finish_add(BODY_item.id);
       });
-      return { id: result_ids }; 
+      return { id: result_ids };
     };
     this_awe.constructor.prototype.projections.view = function(BODY, HEAD) {
       if (!BODY) { BODY = {}; }
@@ -2476,7 +2441,7 @@ if (!parent) {
       }
       var return_result = {},
         self = this;
-      
+
       BODY.forEach(function(item){
         if (item.data && item.where && item.where.id) {
           var fields_updated = [];
@@ -2527,19 +2492,19 @@ if (!parent) {
       else if (BODY.id) {
         projection = this_awe.projections.view(BODY.id);
       }
-      
+
       if (!projection) {
         console.trace('cant delete',BODY);
         return this.constructor.prototype.delete.call(this, BODY, HEAD); // super
       }
-    
+
       if (projection.material()) {
         this_awe.materials.delete(projection.material().id)
       }
       if (projection.texture()) {
         this_awe.textures.delete(projection.texture().id)
       }
-      
+
       if (projection.parent && typeof(projection.parent) == 'function')  {
         try {
           parent = projection.parent();
@@ -2556,11 +2521,11 @@ if (!parent) {
         }
         else {
           console.log('no mesh to delete!', BODY, HEAD)
-        } 
+        }
       }
-      
+
       delete(_clickable_objects['projection-'+projection.id]);
-      
+
       return this.constructor.prototype.delete.call(this, BODY, HEAD); // super
     };
 
@@ -2575,9 +2540,9 @@ if (!parent) {
       var results = [],
         self = this;
 
-      
+
       BODY.forEach(function(BODY_item){
-        console.log('adding texture', BODY_item)
+        // console.log('adding texture', BODY_item)
         var id = "texture-"+random_id();
         var success = BODY_item.success_callback ? BODY_item.success_callback : noop;
         delete (BODY_item.success_callback);
@@ -2608,10 +2573,10 @@ if (!parent) {
           var capabilities = this_awe.util.get_capabilities('gum');
           var settings = this_awe.util.get_settings('camerastream_poster|default_video_poster');
           if (paths.length) {
-            
+
   //          v.crossOrigin = BODY_item.cross_origin || "anonymous";
 //             v.src = path;
-            
+
             paths.forEach(function(path){
               var suffix = path.match(/\.(webm|mp4|ogg|ogv)/i);
               var source = document.createElement('source');
@@ -2620,7 +2585,7 @@ if (!parent) {
               console.log(source, suffix[1]);
               v.appendChild(source);
             });
-            
+
             var autoplay = true;
             if (BODY_item.autoplay !== undefined) {
               autoplay = BODY_item.autoplay;
@@ -2634,7 +2599,7 @@ if (!parent) {
             var cc = c.getContext('2d');
             cc.fillStyle = "white";
             cc.fillRect(0, 0, c.width, c.height);
-            
+
             var poster;
             if (BODY_item.poster) {
               poster = BODY_item.poster;
@@ -2680,7 +2645,7 @@ if (!parent) {
                 _resize();
               }, false);
             }
-            
+
             var play = function(){
               try {
                 inline_video_shim_toggle(v, true)
@@ -2701,24 +2666,24 @@ if (!parent) {
               } catch(e) { console.trace('play() error',e);}
             }
             window.addEventListener('touchstart', play, false);
-            
+
             v.addEventListener('playing', function(){
               if (!v.paused) {
                 window.removeEventListener('touchstart', play);
               }
             })
-            
+
             play();
             v.setAttribute('data-sourcetype', 'video')
             v.setAttribute('data-textureid', id)
-            
+
             if (BODY_item.loop !== undefined) {
               v.loop = BODY_item.loop;
             }
             if (BODY_item.muted !== undefined) {
               v.muted = BODY_item.muted;
             }
-            
+
             texture = new THREE.Texture(c);
             texture.needsUpdate = true;
             texture.minFilter = THREE.LinearFilter;
@@ -2726,7 +2691,7 @@ if (!parent) {
             texture.cc = cc;
           }
           else if (BODY_item.path.match(/^camerastream$/i) && capabilities.gum) {
-            
+
             var autoplay = true;
             if (BODY_item.autoplay !== undefined) {
               autoplay = BODY_item.autoplay;
@@ -2735,7 +2700,7 @@ if (!parent) {
               autoplay = !BODY_item.paused;
             }
             v.autoplay = autoplay;
-            
+
             var play = function(){
               inline_video_shim_toggle(v, true);
               if (!inline_video_shim_required) {
@@ -2752,22 +2717,23 @@ if (!parent) {
               }
             }
             v.go = function(){
-              
+
               var vs = this_awe.video_stream();
               window.removeEventListener('gum_ready', v.go, false);
               window.addEventListener('touchstart', play, false);
+              v.setAttribute('playsinline', 'true');
               v.addEventListener('playing', function(){
                 window.removeEventListener('touchstart', play);
               })
-              
+
               this_awe.util.connect_stream_to_src(vs.get_stream(), v, BODY_item.id);
               v.load();
               play();
             }
-            
+
             v.setAttribute('data-sourcetype', 'camerastream');
             v.setAttribute('data-textureid', id)
-            
+
             if (BODY_item.loop !== undefined) {
               v.loop = BODY_item.loop;
             }
@@ -2778,14 +2744,14 @@ if (!parent) {
             var height = v.videoHeight || 240;
             var c = document.createElement('canvas');
             var cc = c.getContext('2d');
-            
+
             c.width = width;
             c.height = height;
-            
-            cc.fillStyle = "white";
+
+            cc.fillStyle = "#000000";
             cc.fillRect(0, 0, c.width, c.height);
-            
-            
+
+
             var poster;
             if (BODY_item.poster) {
               poster = BODY_item.poster;
@@ -2815,7 +2781,7 @@ if (!parent) {
               poster_img.src = poster;
               v.setAttribute('poster', poster);
             }
-            
+
             var _resize = function(){
               c.width = v.videoWidth || width;
               c.height = v.videoHeight || height;
@@ -2832,20 +2798,23 @@ if (!parent) {
                 _resize();
               }, false);
             }
-            
+
+            var loadingText = BODY_item.loadingText || '';
+            var loadingTextColor = BODY_item.loadingTextColor || '#FFFFFF';
+
             cc.font = '20px sans-serif';
             cc.textAlign = 'center';
             cc.textBaseline = 'middle';
-            
-            cc.fillStyle = '#000000';
-            cc.fillText('LOADING TEXTURE', width/2, height/2, width);
-            
+
+            cc.fillStyle = loadingTextColor;
+            cc.fillText(loadingText, width/2, height/2, width);
+
             texture = new THREE.Texture(c);
             texture.needsUpdate = true;
             texture.minFilter = THREE.LinearFilter;
             texture.video = v;
             texture.cc = cc;
-            
+
             if (!BODY_item.paused) {
               if (!this_awe.video_stream()) {
                 this_awe.setup_stream();
@@ -2861,7 +2830,7 @@ if (!parent) {
             else {
               window.addEventListener('gum_ready', v.go, false);
             }
-            
+
           }
           else if (BODY_item.path.match(/^stream$/i)) {
             if (!BODY_item.source_element) {
@@ -2870,9 +2839,9 @@ if (!parent) {
             var v = BODY_item.source_element;
             var c = document.createElement('canvas');
             var cc = c.getContext('2d');
-            cc.fillStyle = "white";
+            cc.fillStyle = "#2F7DE1";
             cc.fillRect(0, 0, c.width, c.height);
-            
+
             var poster;
             if (BODY_item.poster) {
               poster = BODY_item.poster;
@@ -2902,7 +2871,7 @@ if (!parent) {
               poster_img.src = poster;
               v.setAttribute('poster', poster);
             }
-            
+
             var _resize = function(){
               c.width = v.videoWidth || 320;
               c.height = v.videoHeight || 240;
@@ -2919,7 +2888,7 @@ if (!parent) {
                 _resize();
               }, false);
             }
-            
+
             var autoplay = true;
             if (BODY_item.autoplay !== undefined) {
               autoplay = BODY_item.autoplay;
@@ -2928,7 +2897,7 @@ if (!parent) {
               autoplay = !BODY_item.paused;
             }
             v.autoplay = autoplay;
-            
+
             var play = function(){
               inline_video_shim_toggle(v, true);
               if (!inline_video_shim_required) {
@@ -2951,7 +2920,7 @@ if (!parent) {
             play();
             v.setAttribute('data-sourcetype', 'stream')
             v.setAttribute('data-textureid', id)
-  
+
             texture = new THREE.Texture(c);
             texture.needsUpdate = true;
             texture.minFilter = THREE.LinearFilter;
@@ -2984,7 +2953,7 @@ if (!parent) {
               texture.wrapS = THREE.RepeatWrapping;
               texture.repeat.x = -1;
             }
-            
+
           }
           var item = new awe_texture({ id: id, texture: texture }, self);
           results.push(item);
@@ -2994,7 +2963,7 @@ if (!parent) {
           var params = this_awe.util.extend({
             width: 300,
             height: 200,
-            
+
             background_color: '#ffffff',
             background_image: null,
             text_style: 'fill', // fill / outline
@@ -3006,23 +2975,23 @@ if (!parent) {
 text_position_y: 0,
             text_position_x: 0,
 */
-            
+
             line_width: 0,
             line_cap: 'butt', // butt / round / square
             line_join: 'round', // round / bevel / miter
             miter_limit: 10,
             line_dash: null,
             line_dash_offset: 0,
-            
+
             font: '20px sans-serif',
-            
+
             shadow_offset_x: 0,
             shadow_offset_y: 0,
             shadow_blur: 0,
             shadow_color: null,
 
             max_width: undefined
-            
+
           }, BODY_item);
           // center label by default
           if (params.text_position_x == undefined) {
@@ -3031,12 +3000,12 @@ text_position_y: 0,
           if (params.text_position_y == undefined) {
             params.text_position_y = params.height / 2;
           }
-          
+
           var c = document.createElement('canvas');
-          
+
 //           c.id = 'texture-canvas-'+id;
 //           document.body.appendChild(c);
-          
+
           var cc = c.getContext('2d');
           c.width = params.width;
           c.height = params.height;
@@ -3048,19 +3017,22 @@ text_position_y: 0,
             cc.fillStyle = params.background_color;
             cc.fillRect(0,0,width,height);
           }
-          /*
-if (params.background_image){
-            var img = new Image();
-            img.src = params.background_image;
-            img.onload = function(){
-              var ptrn = cc.createPattern(img,'repeat');
-              cc.fillStyle = ptrn;
-              cc.fillRect(0,0,width,height);
-              texture.needsUpdate = true;
-            };       
-          }
-          
-*/
+
+            // if (params.background_image){
+            //     console.log('%c will load background image', 'color: red');
+            //     var img = new Image();
+            //     img.crossOrigin = "anonymous";
+            //     img.src = params.background_image;
+            //     img.onload = function(){
+            //         console.log('%c background image loaded', 'color: red');
+            //         var ptrn = cc.createPattern(img,'repeat');
+            //         cc.fillStyle = ptrn;
+            //         cc.fillRect(0,0,width,height);
+            //         texture.needsUpdate = true;
+            //     };
+            // }
+
+
           if (parseInt(params.line_width) > 0) {
             cc.strokeStyle = params.text_outline_color;
             cc.lineWidth = params.line_width;
@@ -3076,19 +3048,19 @@ if (params.background_image){
           cc.textAlign = params.text_align;
           cc.textBaseline = params.text_baseline;
           cc.direction = params.direction;
-          
+
           cc.fillStyle = params.text_color;
-          
+
           if (params.text_style == 'fill'){
             cc.fillText(params.label, params.text_position_x, params.text_position_y, params.max_width || params.width);
           }
           else {
             cc.strokeText(params.label, params.text_position_x, params.text_position_y, params.max_width || params.width);
           }
-          
+
           var texture = new THREE.Texture(c);
           texture.needsUpdate = true;
-          // 
+          //
 //          texture.cc = cc;
           texture.minFilter = THREE.LinearFilter;
           if (BODY_item.wrap_s) {
@@ -3102,9 +3074,9 @@ if (params.background_image){
           if (BODY_item.repeat) {
             texture.repeat.set(BODY_item.repeat.x || 1, BODY_item.repeat.y || 1)
           }
-          
+
           texture.needsUpdate = true;
-          
+
           var item = new awe_texture({ id: id, texture: texture }, self);
           results.push(item);
         }
@@ -3112,9 +3084,9 @@ if (params.background_image){
           throw { code: 500, message: 'texture.path or texture.label required' };
         }
       });
-      
+
       return this.constructor.prototype.add.call(this, results, HEAD); // super
-    } 
+    }
     this_awe.constructor.prototype.textures.delete = function(BODY, HEAD) {
       var texture;
       if (typeof BODY == 'string' || typeof BODY == 'number') {
@@ -3144,9 +3116,9 @@ if (params.background_image){
       }
       var results = [],
         self = this;
-        
+
       BODY.forEach(function(BODY_item){
-      
+
         var id = BODY_item.id || "material-"+random_id();
 //         var success = BODY_item.success_callback || noop;
         delete BODY_item.id;
@@ -3172,7 +3144,7 @@ if (params.background_image){
           BODY_item.overdraw = true;
         }
         var material;
-        
+
         switch(type) {
           case 'phong':
             if (!BODY_item.shading) {
@@ -3192,7 +3164,7 @@ if (params.background_image){
           case 'sprite_canvas':
             material = new THREE.SpriteCanvasMaterial(BODY_item);
             break;
-          default: 
+          default:
             material = new THREE.MeshBasicMaterial(BODY_item);
         }
         material.side = side;
@@ -3220,10 +3192,10 @@ if (params.background_image){
         return this.constructor.prototype.add.call(this, item, HEAD); // super
       }
     };
-          
+
     this_awe.constructor.prototype.setup_scene = function(io) {
       this.origin = { x: 0, y: 0, z: 0};
-      
+
       io = _extend({
         id: 'default'
       }, io);
@@ -3239,7 +3211,7 @@ if (params.background_image){
       var lights = this_awe.lights.list();
 
       if (!lights.length) {
-        if (settings.default_lights && Array.isArray(settings.default_lights)) { 
+        if (settings.default_lights && Array.isArray(settings.default_lights)) {
           this_awe.lights.add(settings.default_lights);
         }
       }
@@ -3250,22 +3222,22 @@ if (params.background_image){
       loading_manager.onProgress = function ( item, loaded, total ) {
         this_awe.scene_needs_rendering = 1;
       }
-      
+
       var renderer = this_awe.renderer();
       var awe_canvas = renderer.get_canvas();
       var aspect_ratio = awe_canvas.clientWidth / awe_canvas.clientHeight;
       var pov = this_awe.pov();
-      
+
       pov.set_aspect(aspect_ratio);
       pov.update_projection_matrix();
-      
+
       renderer.set_size(awe_canvas.clientWidth, awe_canvas.clientHeight, false);
       this_awe.scene_needs_rendering = 1;
-      
+
       this_awe.scene_ready = true;
       var event = new CustomEvent('scene_ready');
       window.dispatchEvent(event);
-      
+
       console.log('scene_ready')
       _tick();
     };
@@ -3284,7 +3256,7 @@ if (params.background_image){
         width = awe_canvas.clientWidth,
         height = awe_canvas.clientHeight,
         aspect = width / height;
-        
+
       if (awe_canvas.width != width || awe_canvas.height != height || force) {
         pov.set_aspect(aspect);
         pov.update_projection_matrix();
@@ -3299,18 +3271,18 @@ if (params.background_image){
     this_awe.constructor.prototype.render = function() {
       if (this_awe.scene_needs_rendering) {
         // loop through all scenes
-        
+
         var renderer = this_awe.renderer();
         var scenes = this_awe.scenes.list();
         var the_scene = this_awe.scene();
-        
+
         if (scenes.length > 1) {
           renderer.enableScissorTest( true );
           scenes.forEach(function(item) {
             var scene = item.value,
               povs = awe.povs.list({exact: { scene_id: item.id }}),
               pov;
-              
+
             switch (povs.length) {
               case 0:
                 // nothing to render
@@ -3323,30 +3295,30 @@ if (params.background_image){
                 active_povs = awe.povs.list({exact: { scene_id: item.id, active: 1 }});
                 pov = active_povs.length ? active_povs[0].value : povs[0].value;
             }
-            
+
             // get the element that is a place holder for where we want to
             // draw the scene
             if (scene.element) {
               var element = scene.element;
-    
+
               // get its position relative to the page's viewport
               var rect = element.getBoundingClientRect();
-    
+
               // check if it's offscreen. If so skip it
               if ( rect.bottom < 0 || rect.top  > renderer.domElement.clientHeight ||
                 rect.right  < 0 || rect.left > renderer.domElement.clientWidth ) {
                 return;  // it's off screen
               }
-    
+
               // set the viewport
               var width  = rect.right - rect.left;
               var height = rect.bottom - rect.top;
               var left   = rect.left;
               var bottom = renderer.domElement.clientHeight - rect.bottom;
-              
+
               pov.aspect = width / height;
               pov.updateProjectionMatrix();
-              
+
               renderer.setViewport( left, bottom, width, height );
               renderer.setScissor( left, bottom, width, height );
             }
@@ -3357,7 +3329,7 @@ if (params.background_image){
         else {
           renderer.render( the_scene, this_awe.pov() );
         }
-        
+
 /*
         for (var i=0,l=scenes.length, scene; i<l; i++) {
           this_awe.renderer().render(scenes[i].value, this_awe.povs.view(scenes[i].id));
@@ -3373,24 +3345,24 @@ if (params.background_image){
         THREE: THREE.REVISION
       }
     }
-    
+
     this_awe.constructor.prototype.animations = (function(){
       return {
         stop: function(objects){
           var stop = function(mesh_id){
             var mesh_tweens = tween_queue[mesh_id];
             for (var property in mesh_tweens) {
-              if (mesh_tweens.hasOwnProperty(property)) {               
+              if (mesh_tweens.hasOwnProperty(property)) {
                 for (var i in mesh_tweens[property]) {
                   if (mesh_tweens[property].hasOwnProperty(i)) {
                     mesh_tweens[property][i].stop();
                   }
-                } 
+                }
               }
             }
             tween_queue[mesh_id] = {};
           }
-          
+
           if (!objects) {
             for (var mesh_id in tween_queue) {
               if (tween_queue.hasOwnProperty(mesh_id)) {
@@ -3418,7 +3390,7 @@ if (params.background_image){
                 }
               }
             } catch(e) { console.log(e); }
-            
+
           }
         }
       }
@@ -3460,7 +3432,7 @@ if (params.background_image){
         console.error(e);
       }
     }
-    
+
     function _transform(ob) {
       ob = ob ? ob : {};
       var def = {
@@ -3481,8 +3453,8 @@ if (params.background_image){
         }
       };
       this.rotation = _extend(def.rotation, ob.rotation);
-      this.scale = _extend(def.scale, ob.scale); 
-      this.position = _extend(def.position, ob.position);   
+      this.scale = _extend(def.scale, ob.scale);
+      this.position = _extend(def.position, ob.position);
       return this;
     };
 
@@ -3519,32 +3491,32 @@ if (params.background_image){
         return io;
       }
       switch(geometry.shape) {
-        case 'cube': 
+        case 'cube':
           io = {
             x: 1,
             y: 1,
             z: 1
           };
           break;
-        case 'sphere': 
+        case 'sphere':
           io = {
             radius: 10
           };
           break;
-        case 'grid': 
+        case 'grid':
           io = {
             size: 100,
             step: 10
           };
           break;
-        case 'plane': 
+        case 'plane':
           io = {
             width: 1,
             height: 1,
             widthSegments: 1,
             heightSegments: 1
           };
-        case 'text': 
+        case 'text':
           io = {
             text: 'theAWEsomeWEB',
             font_url: '',
@@ -3559,14 +3531,14 @@ if (params.background_image){
       }
       return io;
     }
-    
+
     function _update_mesh_io(io, mesh, new_object) {
       if (!io) {
         io = {};
       } else {
         io = _clone(io);
       }
-      
+
       if (!io.geometry) {
         io.geometry = {};
       }
@@ -3582,90 +3554,90 @@ if (params.background_image){
         render = true;
       }
       if (io.scale) {
-        if (io.scale.x !== undefined) { 
-          mesh.scale.x = io.scale.x; 
+        if (io.scale.x !== undefined) {
+          mesh.scale.x = io.scale.x;
         }
-        else if (new_object) { 
-          mesh.scale.x = 1; 
+        else if (new_object) {
+          mesh.scale.x = 1;
         }
-        if (io.scale.y !== undefined) { 
-          mesh.scale.y = io.scale.y; 
+        if (io.scale.y !== undefined) {
+          mesh.scale.y = io.scale.y;
         }
-        else if (new_object) { 
-          mesh.scale.y = 1; 
+        else if (new_object) {
+          mesh.scale.y = 1;
         }
-        if (io.scale.z !== undefined) { 
-          mesh.scale.z = io.scale.z; 
+        if (io.scale.z !== undefined) {
+          mesh.scale.z = io.scale.z;
         }
-        else if (new_object) { 
-          mesh.scale.z = 1; 
+        else if (new_object) {
+          mesh.scale.z = 1;
         }
         delete io.scale;
         render = true;
       }
       if (io.rotation) {
-        if (io.rotation.x !== undefined) { 
-          mesh.rotation.x = THREE.Math.degToRad(io.rotation.x); 
+        if (io.rotation.x !== undefined) {
+          mesh.rotation.x = THREE.Math.degToRad(io.rotation.x);
         }
-        else if (new_object) { 
-          mesh.rotation.x = 0; 
+        else if (new_object) {
+          mesh.rotation.x = 0;
         }
-        if (io.rotation.y !== undefined) { 
-          mesh.rotation.y = THREE.Math.degToRad(io.rotation.y); 
+        if (io.rotation.y !== undefined) {
+          mesh.rotation.y = THREE.Math.degToRad(io.rotation.y);
         }
-        else if (new_object) { 
-          mesh.rotation.y = 0; 
+        else if (new_object) {
+          mesh.rotation.y = 0;
         }
-        if (io.rotation.z !== undefined) { 
-          mesh.rotation.z = THREE.Math.degToRad(io.rotation.z); 
+        if (io.rotation.z !== undefined) {
+          mesh.rotation.z = THREE.Math.degToRad(io.rotation.z);
         }
-        else if (new_object) { 
-          mesh.rotation.z = 0; 
+        else if (new_object) {
+          mesh.rotation.z = 0;
         }
         delete io.rotation;
         render = true;
       }
       if (io.position) {
-        if (io.position.x !== undefined) { 
-          mesh.position.x = io.position.x; 
+        if (io.position.x !== undefined) {
+          mesh.position.x = io.position.x;
         }
-        else if (new_object) { 
-          mesh.position.x = 0; 
+        else if (new_object) {
+          mesh.position.x = 0;
         }
-        if (io.position.y !== undefined) { 
-          mesh.position.y = io.position.y; 
+        if (io.position.y !== undefined) {
+          mesh.position.y = io.position.y;
         }
-        else if (new_object) { 
-          mesh.position.y = 0; 
+        else if (new_object) {
+          mesh.position.y = 0;
         }
-        if (io.position.z !== undefined) { 
-          mesh.position.z = io.position.z; 
+        if (io.position.z !== undefined) {
+          mesh.position.z = io.position.z;
         }
-        else if (new_object) { 
-          mesh.position.z = 0; 
+        else if (new_object) {
+          mesh.position.z = 0;
         }
         delete io.position;
         render = true;
       }
       if (io.target && mesh.target) {
-        
-        if (io.target.x !== undefined) { 
-          mesh.target.position.x = io.target.x; 
+
+        if (io.target.x !== undefined) {
+          mesh.target.position.x = io.target.x;
         }
-        else if (new_object) { 
-          mesh.target.position.x = 0; 
+        else if (new_object) {
+          mesh.target.position.x = 0;
         }
-        if (io.target.y !== undefined) { 
-          mesh.target.position.y = io.target.y; 
+        if (io.target.y !== undefined) {
+          mesh.target.position.y = io.target.y;
         }
-        else if (new_object) { 
-          mesh.target.position.y = 0; 
+        else if (new_object) {
+          mesh.target.position.y = 0;
         }
-        if (io.target.z !== undefined) { 
-          mesh.target.position.z = io.target.z; 
+        if (io.target.z !== undefined) {
+          mesh.target.position.z = io.target.z;
         }
-        else if (new_object) { 
-          mesh.target.position.z = 0; 
+        else if (new_object) {
+          mesh.target.position.z = 0;
         }
         delete io.target;
         render = true;
@@ -3798,15 +3770,15 @@ if (params.background_image){
       delete io.geometry;
       return mesh;
     }
-    
+
     var tween_queue = {};
-    
+
     function _tween(io) {
       try {
-        if (!io.mesh && !io.object) { 
+        if (!io.mesh && !io.object) {
           throw  { code: 500, message: '_tween(): mesh/object not defined' };
         }
-        if (!io.end_state) { 
+        if (!io.end_state) {
           throw  { code: 500, message: '_tween(): end_state not defined' };
         }
         var tween_id = io.mesh ? io.mesh.id : io.object.id;
@@ -3832,9 +3804,9 @@ if (params.background_image){
       }, io);
       var easing_function,
         easing = io.easing.replace(/([A-Z])/g, ' $1').split(' ');
-        
+
       easing.shift();
-      var _1 = easing.shift(), 
+      var _1 = easing.shift(),
         _2 = easing.join('');
       try {
         if (!TWEEN.Easing[_1] || !TWEEN.Easing[_1][_2]) {
@@ -3847,7 +3819,7 @@ if (params.background_image){
         this_awe.error_handler(e);
       }
       if (io.mesh) {
-        var start_state = _get_mesh_state(io.mesh);  
+        var start_state = _get_mesh_state(io.mesh);
       }
       else {
         var accuracy = 7;
@@ -3878,22 +3850,22 @@ if (params.background_image){
             y: parseFloat(parseFloat(mesh.target.position.y).toFixed(accuracy)),
             z: parseFloat(parseFloat(mesh.target.position.z).toFixed(accuracy))
           }
-        }     
+        }
 */
       }
 
       var initial_state = _clone_deep(start_state);
-      
-      
+
+
       if (!tween_queue[tween_id]) {
         tween_queue[tween_id] = {};
       }
-      
+
       var index = 'tween-'+random_id();
       var tweens = [];
 
       ['rotation', 'position', 'scale', 'material', 'target'].forEach(function(param, i){
-        
+
         var mesh;
         if (io.mesh) {
           mesh = io.mesh;
@@ -3906,7 +3878,7 @@ if (params.background_image){
           console.trace('no mesh to animate');
           return;
         }
-        
+
         if (io.end_state[param] != undefined) {
           // compare start and end state and run only if different
           var run = false;
@@ -3922,7 +3894,7 @@ if (params.background_image){
           var d = {};
           d[param] = {};
           var tween = new TWEEN.Tween( start_state[param] );
-          
+
           var last_progress = 0, loop = 0;
           if (!io.object._tweens) {
             io.object._tweens = {};
@@ -3932,7 +3904,7 @@ if (params.background_image){
             TWEEN.remove(io.object._tweens[param]);
           }
           io.object._tweens[param] = tween;
-          
+
           tweens.push(tween);
           tween.to( io.end_state[param], io.duration * 1000 )
           .repeat( io.repeat )
@@ -3972,12 +3944,12 @@ if (params.background_image){
             if (!Object.keys(tween_queue[tween_id][index]).length) {
               delete(tween_queue[tween_id][index])
             }
-            
+
             delete(io.object._tweens[param]);
-            
+
             if (!io.persist) {
               _update_mesh_io(initial_state, mesh);
-              
+
 //               console.log('updated to initial state', initial_state);
               if (io.object && io.object._values_updated) {
                 io.object._values_updated();
@@ -3994,10 +3966,10 @@ if (params.background_image){
               tween_queue[tween_id][index] = {};
             }
             tween_queue[tween_id][index][param] = tween;
-            
+
             if (io.start_callback) {
               io.start_callback(io);
-            }              
+            }
           });
           if (io.run_immediately) {
             tween.start();
@@ -4009,7 +3981,7 @@ if (params.background_image){
       });
       return tweens;
     }
-    
+
     function _load_sound(io) {
       if (io.path == undefined) {
         throw 'url required';
@@ -4036,10 +4008,10 @@ if (params.background_image){
 
     function _play_sound(io) {
       if (io.source == undefined) {
-        throw 'source required'; 
+        throw 'source required';
       }
       if (io.buffer == undefined) {
-        throw 'buffer required'; 
+        throw 'buffer required';
       }
       try {
         io.source.buffer = io.buffer;
@@ -4063,21 +4035,21 @@ if (params.background_image){
         var vec = new THREE.Vector3(0,0,1);
         vec.applyProjection(m);
         vec.normalize();
-        
+
         var up = new THREE.Vector3(0,1,0);
         up.applyProjection(m);
         up.normalize();
-        
+
         this_awe.util.audio_context.listener.setOrientation(vec.x, vec.y, vec.z, up.x, up.y, up.z);
         m.n14 = mx;
-        m.n24 = my; 
+        m.n24 = my;
         m.n34 = mz;
       }
     }
-    
+
     function _update_materials(mesh){
       // after lighting change all visible objects need to have their material.needsUpdate flags set to true and re-rendered
-      // awe.materials() does not hold materials that got loaded via loaders, 
+      // awe.materials() does not hold materials that got loaded via loaders,
       // so we will traverse the three scene children to make sure we reach all materials
       var count = 0;
       this_awe.scene().get_three_scene().traverse( function ( node ) {
@@ -4108,20 +4080,20 @@ if (params.background_image){
       catch (e) {}
       return null;
     }
-    
+
     function _to_scene_coordinates(screen_coordinates, z) {
       var projector = new THREE.Projector();
       var ray = new THREE.Ray();
       var camera = awe.pov().get_mesh();
       var canvas = awe.renderer().get_canvas();
-            
+
       var x = (screen_coordinates.x/canvas.clientWidth) * 2 - 1;
       var y = -(screen_coordinates.y/canvas.clientHeight) * 2 + 1;
       var mouse_vector = new THREE.Vector3(x, y, 1);
-      mouse_vector.unproject(camera); 
+      mouse_vector.unproject(camera);
       var direction = mouse_vector.sub(camera.position).normalize();
       ray.set(camera.position, direction);
-      
+
       var plane = new THREE.Plane(new THREE.Vector3(0,0,1), -z);
       var point = ray.intersectPlane(plane);
 
@@ -4130,10 +4102,10 @@ if (params.background_image){
         y: point.y,
         z: point.z
       };
-      
+
     }
     function _to_screen_coordinates(scene_coordinates) {
-  
+
       var camera = awe.pov().get_mesh();
       var frustum = new THREE.Frustum();
       var cameraViewProjectionMatrix = new THREE.Matrix4();
@@ -4143,20 +4115,20 @@ if (params.background_image){
       camera.matrixWorldInverse.getInverse( camera.matrixWorld );
       cameraViewProjectionMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
       frustum.setFromMatrix( cameraViewProjectionMatrix );
-      
+
       // frustum is now ready to check all the objects you need
       var vector = new THREE.Vector3(scene_coordinates.x, scene_coordinates.y, scene_coordinates.z);
       if (frustum.containsPoint(vector)) {
         var width = canvas.clientWidth, height = canvas.clientHeight;
         var widthHalf = width / 2, heightHalf = height / 2;
-        
+
         var projector = new THREE.Projector();
         vector.project( camera );
-        
+
         vector.x = ( vector.x * widthHalf ) + widthHalf;
         vector.y = - ( vector.y * heightHalf ) + heightHalf;
         return { x: vector.x, y: vector.y};
-      
+
       }
 
     }
@@ -4164,7 +4136,7 @@ if (params.background_image){
       var c = new THREE.Color(hex);
       return c.getHexString();
     }
-    
+
     function _parse_color(color){
       var hex;
       if (color.charAt && color.charAt(0) == '#') {
@@ -4177,14 +4149,14 @@ if (params.background_image){
         hex = color.toString(16);
       }
       else {
-        
+
         console.warn('invalid material color, defaulting to #ffffff', color);
         hex = 'ffffff';
       }
       return parseInt(hex,16);
     }
-    
-    
+
+
     function _make_three_vector(xyz){
       if (!isNaN(xyz.x) && !isNaN(xyz.y) && !isNaN(xyz.z)) {
         return new THREE.Vector3(xyz.x, xyz.y, xyz.z);
@@ -4192,11 +4164,11 @@ if (params.background_image){
       console.warn('util.make_three_vector(): not a valid 3d point',xyz);
       return null;
     }
-    
+
     var last_tick_time;
     var frames_per_second = 25;
     var render_threshold = ((1000/frames_per_second)/1000);
-    
+
     function _tick() {
       try {
         var textures = this_awe.textures.list(),
@@ -4209,9 +4181,9 @@ if (params.background_image){
         if (textures_updated) {
           this_awe.scene_needs_rendering = 1;
         }
-        // throttle 
+        // throttle
         var render = false;
-        
+
         if (!last_tick_time) {
           last_tick_time = Date.now();
           render = true;
@@ -4225,13 +4197,13 @@ if (params.background_image){
             last_tick_time = time;
           }
         }
-        
+
         if (render) {
           TWEEN.update();
           this_awe.resize_canvas();
           this_awe.render();
         }
-        
+
         requestAnimationFrame(function() {
           if (render) {
             var event = new CustomEvent('pretick');
@@ -4243,7 +4215,7 @@ if (params.background_image){
             window.dispatchEvent(event);
           }
         });
-      } 
+      }
       catch(e) {
         this_awe.error_handler(e);
       }
@@ -4265,8 +4237,8 @@ if (params.background_image){
     function random_id() {
       return Date.now()+'-'+Math.round(Math.random()*1000);
     }
-    
-    
+
+
     var _look_at = function() {
     	return function ( vector ) {
       	var m1 = new THREE.Matrix4();
@@ -4367,7 +4339,7 @@ if (params.background_image){
         }
       }
     };
-    
+
     this_awe.util.to_scene_coordinates = _to_scene_coordinates;
     this_awe.util.to_screen_coordinates = _to_screen_coordinates;
     this_awe.util.make_three_vector = _make_three_vector;
@@ -4384,7 +4356,7 @@ if (params.background_image){
     var _clone = this_awe.util.clone;
     var _clone_deep = this_awe.util.clone_deep;
     var _type = this_awe.util.type;
-    
+
   } else {
     throw "awe does not exist";
   }
